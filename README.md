@@ -1,3 +1,4 @@
+HEAD
 # pemancingan-web
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -42,3 +43,7 @@ npm run build
 ```sh
 npm run lint
 ```
+
+# pancingin-web
+Project kelompok membuat web
+94febbbd533f4e93705bfd96f96e88e9b889fc56
