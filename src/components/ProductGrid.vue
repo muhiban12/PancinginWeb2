@@ -10,8 +10,9 @@
     <div class="product-grid">
       <div 
         class="product-card"
-        v-for="(item, i) in paginatedProducts" 
+        v-for="(item, i) in paginatedProducts"
         :key="i"
+        @click="$router.push(`/product/${i+1}`)"
       >
         <img :src="item.image" alt="produk" />
         

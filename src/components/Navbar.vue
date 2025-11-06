@@ -1,24 +1,10 @@
 <template>
-  <nav :class="['main-nav', { scrolled: isScrolled }]">
+  <nav :class="['main-nav', { scrolled: isScrolled || !isHomepage }]">
 
 <!-- Logo -->
 <div v-if="!showFullSearch" class="nav-left">
   <router-link to="/" class="logo">🎣 Pancingin</router-link>
 </div>
-
-<!-- Search bar kecil saat scroll (desktop mode) -->
-<!-- <div 
-  v-if="isScrolled && !isMobileLike && !showFullSearch" 
-  class="mini-search"
->
-  <input
-    v-model="searchQuery"
-    @keyup.enter="goSearch"
-    placeholder="Cari tempat mancing..."
-  />
-  <button @click="goSearch">🔍</button>
-</div> -->
-
 
 <!-- FULL SCREEN SEARCH MODE -->
 <div v-if="showFullSearch" class="full-search">
@@ -37,7 +23,7 @@
 
 <!-- Desktop -->
 <template v-if="!isMobileLike">
-  <i v-if="isScrolled" class="bi bi-search nav-icon" @click="showFullSearch = true"></i>
+  <i v-if="isScrolled && showSearchIcon" class="bi bi-search nav-icon" @click="showFullSearch = true"></i>
   <router-link to="/store" class="nav-icon"><i class="bi bi-shop"></i></router-link>
   <router-link to="/notifications" class="nav-icon"><i class="bi bi-bell"></i></router-link>
   <router-link to="/cart" class="nav-icon"><i class="bi bi-cart"></i></router-link>
@@ -48,11 +34,11 @@
 
 <!-- Mobile -->
 <template v-if="isMobileLike">
-  <!-- Hamburger icon selalu muncul -->
-  <i class="bi bi-list nav-icon" @click="showMobileMenu = !showMobileMenu"></i>
-
   <!-- Search icon hanya muncul jika sudah scroll -->
   <i v-if="isScrolled" class="bi bi-search nav-icon" @click="showFullSearch = true"></i>
+
+  <!-- Hamburger icon selalu muncul -->
+  <i class="bi bi-list nav-icon" @click="showMobileMenu = !showMobileMenu"></i>
 
   <!-- Mobile menu -->
   <div v-if="showMobileMenu" class="mobile-menu position-absolute bg-white p-2 shadow rounded">
@@ -83,6 +69,12 @@ export default {
   computed: {
     isMobileLike() {
       return window.innerWidth < 768; // kamu bisa adjust breakpoint
+    },
+    isHomepage(){
+      return this.$route.path === '/';
+    },
+    showSearchIcon() {
+    return this.isScrolled || !this.isHomepage;
     }
   },
   mounted() {
@@ -126,6 +118,9 @@ export default {
 .main-nav:not(.scrolled) {
   background: transparent;
   color: white;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
 }
 
 /* Navbar solid saat scroll */
@@ -151,14 +146,14 @@ export default {
 }
 
 .nav-icon {
-  font-size: 20px;
+  font-size: 18px;
   color: inherit;
   cursor: pointer;
   transition: 0.2s ease;
 }
 
 .bi-search {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .nav-icon:hover {

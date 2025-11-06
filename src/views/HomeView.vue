@@ -1,4 +1,5 @@
 <template>
+  <div class="home-page">
   <!-- Hero Section -->
   <section class="hero">
     <!-- <header class="navbar">
@@ -46,6 +47,7 @@
   </section> -->
   <FishingSpotSlider />
   <ProductGrid />
+  </div>
 </template>
 
 <script>
@@ -91,8 +93,6 @@ export default {
 };
 </script>
 
-
-
 <style scoped>
 * {
   margin: 0;
@@ -107,8 +107,13 @@ body {
   overflow-x: hidden;
 }
 
+.home-page {
+  padding-top: 0 !important;
+}
+
 /* --- HERO SECTION --- */
 .hero {
+  margin-top: -70px;
   position: relative;
   height: 120vh;
   background: url('@/assets/marlin.jpg') center/cover no-repeat;
