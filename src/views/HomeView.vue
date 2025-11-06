@@ -1,130 +1,326 @@
 <template>
-  <div class="home-container">
-    
-    <!-- Hero Section -->
-    <section class="hero">
-      <h1 class="title">Selamat Datang di Pancingin 🎣</h1>
-      <p class="subtitle">
-        Temukan lokasi pemancingan terbaik, booking tempat dengan mudah, dan beli perlengkapan memancing secara online!
-      </p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <!-- <header class="navbar">
+      <div class="logo">🎣 Pancingin<span>.com</span></div>
+      <nav>
+        <a href="#">Beranda</a>
+        <a href="#">Event</a>
+        <a href="#">Tempat</a>
+        <a href="#">Kontak</a>
+        <button class="login-btn">Login</button>
+      </nav>
+    </header> -->
 
-      <div class="btn-group">
-        <router-link class="btn main-btn" to="/spots">Cari Lokasi</router-link>
-        <router-link class="btn sec-btn" to="/booking">Booking Tempat</router-link>
-        <router-link class="btn sec-btn" to="/store">Toko Pancing</router-link>
+    <div class="hero-content">
+      <h1>Mau mancing kemana hari ini?</h1>
+      <div class="search-box">
+        <input 
+          type="text" 
+          placeholder="Cari tempat mancing terdekat..." 
+          v-model="keyword" 
+          @keyup.enter="search"/>
+        <!-- <button>Cari</button> -->
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Feature Section -->
-    <section class="features">
-      <h2>Kenapa Pancingin?</h2>
-      <div class="feature-list">
+  <!-- Event Highlight -->
+  <!-- <section class="event-highlight" id="eventHighlight">
+    <div class="event-card">
+      <h2>🎉 10.10 FISHING FEST 10 Hari Strike, Hadiah 10 Kali Lipat!</h2>
+      <p>Bergabunglah di event mancing terbesar tahun ini, nikmati diskon & menangkan hadiah spektakuler!</p>
+      <button class="register-btn">Daftar Sekarang</button>
+    </div>
+  </section> -->
+  <EventCarousel />
 
-        <div class="feature-card">
-          <h3>🎣 Lokasi Pemancingan</h3>
-          <p>Temukan spot pemancingan terdekat dan terbaik.</p>
-        </div>
-
-        <div class="feature-card">
-          <h3>📅 Booking Online</h3>
-          <p>Pesan tempat memancing tanpa ribet dan tanpa antri.</p>
-        </div>
-
-        <div class="feature-card">
-          <h3>🛒 Toko Perlengkapan</h3>
-          <p>Beli alat pancing dan umpan langsung di aplikasi.</p>
-        </div>
-
-      </div>
-    </section>
-    
-  </div>
+  <!-- Section Pemancingan -->
+  <!-- <section class="places">
+    <h2>Pemancingan Terdekat</h2>
+    <div class="place-list">
+      <div class="place-card"><img src="https://picsum.photos/300/200?1"><h3>Nama Tempat Pemancingan</h3></div>
+      <div class="place-card"><img src="https://picsum.photos/300/200?2"><h3>Nama Tempat Pemancingan</h3></div>
+      <div class="place-card"><img src="https://picsum.photos/300/200?3"><h3>Nama Tempat Pemancingan</h3></div>
+    </div>
+  </section> -->
+  <FishingSpotSlider />
+  <ProductGrid />
 </template>
 
 <script>
+import EventCarousel from '@/components/EventCarousel.vue';
+import FishingSpotSlider from '@/components/FishingSpotSlider.vue';
+import ProductGrid from '@/components/ProductGrid.vue';
+
 export default {
   name: "HomeView",
+
+  components: { EventCarousel, FishingSpotSlider, ProductGrid},
+
+  data() {
+    return {
+      keyword: "" // untuk menyimpan teks input pencarian
+    };
+  },
+
+  // mounted() {
+  //   const eventSection = document.getElementById('eventHighlight');
+  //   window.addEventListener('scroll', () => {
+  //     const revealPoint = window.innerHeight / 1.3;
+  //     const top = eventSection.getBoundingClientRect().top;
+  //     if (top < revealPoint) {
+  //       eventSection.classList.add('visible');
+  //     }
+  //   });
+  // },
+
+  methods: {
+    search() {
+      if (!this.keyword.trim()) return;
+
+      console.log("🔍 Mencari:", this.keyword);
+
+      // arahkan user ke halaman lokasi dengan query pencarian
+      this.$router.push({
+        path: "/spots",
+        query: { q: this.keyword }
+      });
+    }
+  }
 };
 </script>
 
+
+
 <style scoped>
-.home-container {
-  text-align: center;
-  padding: 40px;
-  font-family: "Poppins", sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Hero */
+body {
+  color: #222;
+  background: #f7f9fc;
+  overflow-x: hidden;
+}
+
+/* --- HERO SECTION --- */
 .hero {
-  padding: 60px 20px;
-  background: linear-gradient(135deg, #4dbfff, #0072ff);
+  position: relative;
+  height: 120vh;
+  background: url('@/assets/marlin.jpg') center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, #f7f9fc);
+  z-index: 1;
+}
+
+/* Navbar */
+.navbar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 20px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: white;
-  border-radius: 12px;
+  z-index: 10;
 }
 
-.title {
-  font-size: 32px;
-  font-weight: bold;
-}
-
-.subtitle {
-  margin-top: 10px;
-  font-size: 18px;
-  opacity: 0.9;
-}
-
-.btn-group {
-  margin-top: 25px;
-}
-
-.btn {
-  padding: 12px 20px;
-  margin: 0 10px;
+.navbar a {
+  color: white;
+  margin: 0 15px;
   text-decoration: none;
-  border-radius: 8px;
-  display: inline-block;
-  font-weight: 600;
   transition: 0.3s;
 }
 
-.main-btn {
-  background: white;
-  color: #0072ff;
+.navbar a:hover {
+  color: #ffdd57;
 }
 
-.sec-btn {
-  background: rgba(255, 255, 255, 0.8);
-  color: #005fcc;
+.logo {
+  font-weight: bold;
+  font-size: 1.4rem;
 }
 
-.btn:hover {
-  opacity: 0.8;
+.logo span {
+  color: #ffdd57;
 }
 
-/* Features */
-.features {
-  margin-top: 50px;
+.login-btn {
+  background: #ffdd57;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-.feature-list {
+/* Hero content */
+.hero-content {
+  z-index: 2;
+  color: white;
+  position: relative;
+
+  /* naikkan posisi */
+  margin-top: -80px; /* adjust sesuai kebutuhan */
+}
+
+.hero-content h1 {
+  font-family: 'Merienda', cursive;
+  font-weight: 700;
+  font-size: 2rem;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.35);
+}
+
+.search-box {
   display: flex;
   justify-content: center;
-  gap: 25px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.search-box input {
+  border: none;
+  padding: 10px 20px;
+  width: 300px;
+  background: transparent;
+  color: white;
+}
+
+.search-box input::placeholder {
+  color: #eee;
+}
+
+/* .search-box button {
+  background: #ffdd57;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+} */
+
+/* --- EVENT HIGHLIGHT --- */
+.event-highlight {
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(100px);
+  transition: opacity 1s ease, transform 1s ease;
+  padding: 100px 0;
+}
+
+.event-highlight.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.event-card {
+  background: #004aad;
+  color: white;
+  padding: 40px;
+  border-radius: 20px;
+  width: 80%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.event-card h2 {
+  margin-bottom: 15px;
+}
+
+.register-btn {
+  background: #ffdd57;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px;
+  margin-top: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+}
+
+/* --- PLACES --- */
+.places {
+  margin-top: 40px;
+  padding: 40px 80px;
+}
+
+.places h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.place-list {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
   flex-wrap: wrap;
-  margin-top: 20px;
 }
 
-.feature-card {
-  background: #f9f9f9;
-  padding: 20px;
-  width: 260px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.place-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 300px;
+  transition: transform 0.3s ease;
 }
 
-.feature-card h3 {
-  margin-bottom: 8px;
-  font-size: 18px;
-  color: #0072ff;
+.place-card:hover {
+  transform: translateY(-8px);
+}
+
+.place-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.place-card h3 {
+  padding: 15px;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .hero-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .search-box input {
+    width: 200px;
+  }
+
+  .event-card {
+    width: 90%;
+    padding: 25px;
+  }
+
+  .places {
+    padding: 20px;
+  }
 }
 </style>

@@ -1,0 +1,7 @@
+/* Import font global */
+@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
+/* Default font untuk seluruh website */
+body {
+  font-family: 'Poppins', sans-serif;
+}
