@@ -1,49 +1,52 @@
-HEAD
-# pemancingan-web
+# TUBES WEB & MOBILE PROGRAMING TAHAP 3
+Tubes Tahap 3: Implementasi UI/UX. Pembelian sebuah produk dari toko. Mulai dari memilih produk, checkout produk, pemilihan metode pembayaran, status pembayaran.
+#### Kelompok 5 :
+1. Muhammad Alan Andika (2400353)
+2. Muhiban Fadlan Nursaid (2400382)
+3. Gherry Alviart (2408614)
 
-This template should help get you started developing with Vue 3 in Vite.
+# Pancingin (Web Pemancingan)
 
-## Recommended IDE Setup
+## 🛒 ALUR PEMBELIAN BARANG (SETELAH LOGIN)
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+#### 1. Landing Page (Home)
+ * Menampilkan daftar produk (gambar, nama, harga).
+ * Navbar berisi menu: Home, Kategori, Keranjang, Profil, Logout.
+ * Karena user sudah login → tombol Login/Register diganti dengan Profil.
+ * User bisa klik salah satu produk untuk melihat detail-nya.
 
-## Recommended Browser Setup
+Tujuan : Menarik user untuk klik produk → ke halaman detail.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+![home.](/Dokumentasi/home.png)
 
-## Customize configuration
+#### 2. Halaman Detail Produk (Inspect Barang)
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+* Menampilkan:
+    * Nama produk, gambar besar, deskripsi lengkap, harga.
+    * Tombol: Tambah ke Keranjang dan Beli Langsung.
+    * User bisa pilih opsi (warna/ukuran jika ada).
+    * user bisa pilih berapa jumlah yang akan di beli.
 
-## Project Setup
+Aksi user : Klik “Beli Langsung”.
+dulu.
 
-```sh
-npm install
-```
+![detail.](/Dokumentasi/detail.png)
 
-### Compile and Hot-Reload for Development
+#### 3. Halaman Checkout
 
-```sh
-npm run dev
-```
+* Sistem otomatis menampilkan ringkasan:
+    * Barang yang dibeli, jumlah, harga total.
+    * Alamat pengiriman (default dari profil user).
+    * Pilihan metode pembayaran (transfer, e-wallet, COD).
+    * User bisa edit alamat atau metode pembayaran.
 
-### Compile and Minify for Production
+Aksi user : Klik “Bayar Sekarang”.
 
-```sh
-npm run build
-```
+![Checkout.](/Dokumentasi/co.png)
 
-### Lint with [ESLint](https://eslint.org/)
+#### 4. Konfirmasi Pembelian
+* Setelah pembayaran sukses → tampil halaman “Pembelian Berhasil”.
+* lalu user akan kembali ke halaman produk.
 
-```sh
-npm run lint
-```
+![payment.](/Dokumentasi/success.png)
 
-# pancingin-web
-Project kelompok membuat web
-94febbbd533f4e93705bfd96f96e88e9b889fc56
