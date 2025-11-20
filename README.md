@@ -1,3 +1,4 @@
+HEAD
 # TUBES WEB & MOBILE PROGRAMING TAHAP 3
 Tubes Tahap 3: Implementasi UI/UX. Pembelian sebuah produk dari toko. Mulai dari memilih produk, checkout produk, pemilihan metode pembayaran, status pembayaran.
 #### Kelompok 5 :
@@ -50,3 +51,7 @@ Aksi user : Klik “Bayar Sekarang”.
 
 ![payment.](/Dokumentasi/success.png)
 
+
+# PancinginWeb2
+lanjut projek
+3d4829c538427038c226bb672e13bddc5e972bd8
