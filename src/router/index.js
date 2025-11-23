@@ -6,7 +6,8 @@ import FishingSpotView from '../views/FishingSpotView.vue'
 import StoreView from '../views/StoreView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
-import ProductDetail from '../views/ProductDetail.vue'
+import ProductDetail from '../views/ProductDetail.vue' 
+import FishingSpotDetail from '@/views/FishingSpotDetail.vue'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
@@ -16,10 +17,11 @@ const routes = [
   { path: '/login', name: 'login', component: LoginView },
   { path: '/register', name: 'register', component: RegisterView },
   { path: '/product/:id', name: 'ProductDetail', component: ProductDetail},
+  { path: '/spot/:id', name: 'spot-detail', component : FishingSpotDetail},
   { path: '/notifications', component: () => import('@/views/NotificationsView.vue') },
   { path: '/cart', component: () => import('@/views/CartView.vue') },
   { path: '/account', component: () => import('@/views/AccountView.vue') },
-  { path: '/checkout', name: 'checkout', component: () => import('@/views/CheckOutPage.vue') }
+  { path: '/checkout', name: 'checkout', component: () => import('@/views/CheckOutPage.vue') },
 ];
 
 const router = createRouter({

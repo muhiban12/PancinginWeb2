@@ -13,7 +13,7 @@
 
       <!-- Kolom Kanan -->
       <div class="col-lg-4 col-md-12">
-        <div class="sticky-wrapper sticky-top">
+        <div class="sticky-wrapper sticky-top"> 
           <div class="box-section">
             <PaymentBox />
           </div>

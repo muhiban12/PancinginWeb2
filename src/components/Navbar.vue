@@ -10,7 +10,7 @@
 <div v-if="showFullSearch" class="full-search">
   <input
     v-model="searchQuery"
-    placeholder="Cari tempat mancing..."
+    :placeholder="searchPlaceholder"
     @keyup.enter="goSearch"
     autofocus
   />
@@ -23,7 +23,7 @@
 
 <!-- Desktop -->
 <template v-if="!isMobileLike">
-  <i v-if="isScrolled && showSearchIcon" class="bi bi-search nav-icon" @click="showFullSearch = true"></i>
+  <i v-if="showSearchIcon" class="bi bi-search nav-icon" @click="showFullSearch = true"></i>
   <router-link to="/store" class="nav-icon"><i class="bi bi-shop"></i></router-link>
   <router-link to="/notifications" class="nav-icon"><i class="bi bi-bell"></i></router-link>
   <router-link to="/cart" class="nav-icon"><i class="bi bi-cart"></i></router-link>
@@ -74,8 +74,18 @@ export default {
       return this.$route.path === '/';
     },
     showSearchIcon() {
-    return this.isScrolled || !this.isHomepage;
+      return !this.isHomepage || this.isScrolled;
+    },
+    searchPlaceholder() {
+    if (this.$route.path.startsWith('/store')) {
+      return 'Cari produk...';
+    } 
+    else if (this.$route.path.startsWith('/spots')) {
+      return 'Cari pemancingan terdekat...';
     }
+    return 'Cari...';
+  }
+
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);

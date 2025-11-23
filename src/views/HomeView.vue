@@ -23,7 +23,7 @@
           @keyup.enter="search"/>
         <!-- <button>Cari</button> -->
       </div>
-    </div>
+    </div> 
   </section>
 
   <!-- Event Highlight -->

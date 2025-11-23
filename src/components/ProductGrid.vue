@@ -3,7 +3,7 @@
 
     <!-- Header -->
     <div class="header-row">
-      <h2>Rekomendasi Produk Pancing</h2>
+      <h2>Rekomendasi Produk</h2>
     </div>
 
     <!-- Produk Grid -->
@@ -31,15 +31,10 @@
     </div>
 
     <!-- Pagination -->
-    <div class="pagination">
-      <button 
-        v-for="page in totalPages" 
-        :key="page"
-        @click="currentPage = page"
-        :class="{ activePage: page === currentPage }"
-      >
-        {{ page }}
-      </button>
+    <div class="text-center mt-4">
+      <router-link to="/store" class="btn btn-primary btn-sm">
+        Lihat Semua
+      </router-link>
     </div>
   </div>
 </template>
@@ -199,7 +194,7 @@ export default {
   color: #0f4eb3;
   border-radius: 6px;
   cursor: pointer;
-  font-size: .85rem;
+  font-size: .60rem;
 }
 
 .pagination button.activePage {

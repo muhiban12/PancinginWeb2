@@ -23,7 +23,7 @@
     </template>
 
     <template v-else>
-      <div class="text-center my-5">
+      <div class="text-center my-5"> 
         <div class="spinner-border"></div>
         <p>Loading...</p>
       </div>

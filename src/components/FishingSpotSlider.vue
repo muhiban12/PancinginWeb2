@@ -26,15 +26,17 @@
           ref="scrollContainer"
           @scroll="checkScroll"
         >
-          <div v-for="spot in filteredSpots" :key="spot.id" class="spot-card">
-            <img :src="spot.image" alt="" />
-            <div class="spot-info">
-              <h3>{{ spot.name }}</h3>
-              <div class="meta">
-                <span>⭐ {{ spot.rating }}</span>
-                <span>📍 {{ spot.distance }} km</span>
+        <div v-for="spot in filteredSpots" :key="spot.id" class="spot-card">
+            <router-link :to="`/spot/${spot.id}`">
+              <img :src="spot.image" alt="" />
+              <div class="spot-info">
+                <h3>{{ spot.name }}</h3>
+                <div class="meta">
+                  <span>⭐ {{ spot.rating }}</span>
+                  <span>📍 {{ spot.distance }} km</span>
+                </div>
               </div>
-            </div>
+            </router-link>
           </div>
         </div>
   
