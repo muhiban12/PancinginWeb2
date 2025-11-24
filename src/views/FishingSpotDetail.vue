@@ -1,102 +1,155 @@
 <template>
   <div class="spot-detail-page">
-    <!-- Navbar -->
-    <Navbar />
-
-    <!-- Cuaca & Maps -->
-    <section class="weather-map-section container my-4">
-      <div class="row g-4">
-        <!-- Cuaca -->
-        <div class="col-md-6">
-          <div class="card shadow-sm p-3">
-            <h5 class="fw-bold mb-2">🌤️ Cuaca Hari Ini</h5>
-            <p class="mb-1">Suhu: {{ weather.temp }}°C</p>
-            <p class="mb-0">Kondisi: {{ weather.desc }}</p>
+    <template v-if="spot">
+      <!-- Cuaca Ringkas -->
+      <section class="container my-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+          <div>
+            <h6 class="fw-bold mb-1">🌤️ Cuaca Hari Ini</h6>
+            <small>{{ weatherNow.condition }} | {{ weatherNow.temperature }}°C | {{ weatherNow.humidity }}% RH</small>
+          </div>
+          <div class="d-flex gap-2 flex-wrap">
+            <span
+              v-for="(forecast, i) in weather7Days.slice(0, 3)"
+              :key="i"
+              class="badge bg-light text-dark"
+            >
+              {{ forecast.date }}: {{ forecast.temperature }}°C
+            </span>
           </div>
         </div>
+      </section>
 
-        <!-- Maps -->
-        <div class="col-md-6">
-          <div class="card shadow-sm p-3">
-            <h5 class="fw-bold mb-2">📍 Lokasi Pemancingan</h5>
-            <MapBox :lat="spot.lat" :lng="spot.lng" :title="spot.name" />
+      <!-- Gambar Utama + Paket Booking -->
+      <section class="container my-4">
+        <div class="row g-4 align-items-start">
+          <!-- Gambar -->
+          <div class="col-md-6">
+            <img :src="spot.images[0]" class="img-fluid rounded shadow mb-2" />
+            <div class="d-flex gap-2 flex-wrap">
+              <img
+                v-for="(img, i) in spot.images.slice(1)"
+                :key="i"
+                :src="img"
+                class="img-thumbnail"
+                style="width: 80px; height: 80px; object-fit: cover;"
+              />
+            </div>
+          </div>
+
+          <!-- Paket Booking -->
+          <div class="col-md-6">
+            <h5 class="fw-bold">🎟️ Pilih Paket Booking</h5>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <button
+                v-for="(pkg, i) in spot.packages"
+                :key="i"
+                :class="['btn', selectedPackage === pkg.name ? 'btn-primary' : 'btn-outline-primary']"
+                @click="selectedPackage = pkg.name"
+              >
+                {{ pkg.name }} - Rp {{ pkg.price.toLocaleString() }}
+              </button>
+            </div>
+            <p class="text-muted">{{ getPackageDescription(selectedPackage) }}</p>
+            <button class="btn btn-success mt-2">Booking Langsung</button>
           </div>
         </div>
+      </section>
+
+      <!-- Overview + Lokasi -->
+      <section class="container my-3">
+        <h5 class="fw-bold">📖 Overview</h5>
+        <p class="mb-2">{{ spot.overview }}</p>
+        <p class="text-muted"><strong>📍 Lokasi:</strong> {{ spot.location }}</p>
+      </section>
+
+      <!-- Fasilitas & Aturan -->
+      <section class="container my-3">
+        <h5 class="fw-bold">🏕️ Fasilitas & Aturan</h5>
+        <p>{{ spot.rules }}</p>
+      </section>
+
+      <!-- Ulasan -->
+      <section class="container my-4 review-section">
+        <h5 class="fw-bold mb-3">💬 Ulasan Pemancing</h5>
+        <div v-for="review in reviews" :key="review.id" class="card p-3 mb-2 shadow-sm">
+          <p class="mb-1"><strong>{{ review.name }}</strong> ⭐ {{ review.rating }}</p>
+          <p class="mb-0">{{ review.comment }}</p>
+        </div>
+      </section>
+    </template>
+
+    <template v-else>
+      <div class="text-center my-5">
+        <div class="spinner-border"></div>
+        <p>Loading...</p>
       </div>
-    </section>
-
-    <!-- Gambar Utama -->
-    <section class="main-image container my-4">
-      <img :src="spot.image" class="img-fluid rounded shadow" />
-    </section>
-
-    <!-- Info Spot -->
-    <section class="spot-info container my-4">
-      <h2 class="fw-bold">{{ spot.name }}</h2>
-      <p class="text-muted">{{ spot.description }}</p>
-      <p><strong>Jam Operasional:</strong> {{ spot.schedule }}</p>
-    </section>
-
-    <!-- Overview -->
-    <section class="overview container my-4">
-      <h4 class="fw-bold mb-3">📖 Overview</h4>
-      <p>{{ spot.overview }}</p>
-    </section>
-
-    <!-- Ulasan -->
-    <section class="reviews container my-4">
-      <h4 class="fw-bold mb-3">💬 Ulasan Pemancing</h4>
-      <div v-for="review in reviews" :key="review.id" class="card p-3 mb-3 shadow-sm">
-        <p class="mb-1"><strong>{{ review.user }}</strong> ⭐ {{ review.rating }}</p>
-        <p class="mb-0">{{ review.comment }}</p>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <!-- <Footer /> -->
+    </template>
   </div>
 </template>
 
 <script>
-import Navbar from '@/components/Navbar.vue';
-import Footer from '@/components/Footer.vue';
-import MapBox from '@/components/MapBox.vue';
-
 export default {
-  name: "FishingSpotDetail",
-  components: { Navbar, Footer, MapBox },
   data() {
     return {
-      weather: { temp: 28, desc: "Cerah berawan" }, // nanti pakai API
+      selectedPackage: null,
       spot: {
         name: "Pemancingan Cimaung",
-        lat: -6.973,
-        lng: 107.572,
-        description: "Tempat pemancingan populer dengan suasana alami.",
-        schedule: "Buka setiap hari 07:00 - 18:00",
-        image: "https://picsum.photos/800/400?random=1",
-        overview: "Pemancingan ini menyediakan kolam ikan air tawar, fasilitas saung, dan area parkir luas."
+        images: [
+          "https://picsum.photos/800/400?random=1",
+          "https://picsum.photos/100/100?random=2",
+          "https://picsum.photos/100/100?random=3"
+        ],
+        overview: "Spot pemancingan alami dengan kolam air tawar dan saung santai.",
+        location: "Jl. Raya Cimaung No. 88, Bandung Selatan",
+        packages: [
+          { name: "1 Jam", price: 20000, description: "Paket pemancingan selama 1 jam." },
+          { name: "2 Jam", price: 35000, description: "Paket hemat untuk 2 jam." }
+        ],
+        rules: "Dilarang membawa umpan hidup. Anak-anak wajib didampingi. Dilarang merokok di area kolam."
       },
+      weatherNow: {
+        temperature: 25,
+        humidity: 95,
+        condition: "Berawan"
+      },
+      weather7Days: [
+        { date: "24 Nov", temperature: 25, humidity: 95, condition: "Berawan" },
+        { date: "25 Nov", temperature: 25, humidity: 94, condition: "Berawan" },
+        { date: "26 Nov", temperature: 25, humidity: 93, condition: "Berawan" },
+        { date: "27 Nov", temperature: 24, humidity: 94, condition: "Berawan" },
+        { date: "28 Nov", temperature: 24, humidity: 94, condition: "Berawan" },
+        { date: "29 Nov", temperature: 24, humidity: 94, condition: "Berawan" },
+        { date: "30 Nov", temperature: 24, humidity: 94, condition: "Berawan" }
+      ],
       reviews: [
-        { id: 1, user: "Andi", rating: 5, comment: "Tempatnya nyaman, ikannya banyak!" },
-        { id: 2, user: "Siti", rating: 4, comment: "Harga terjangkau, cocok untuk keluarga." }
+        { id: 1, name: "Alan", rating: 5, comment: "Tempatnya nyaman, ikannya banyak!" },
+        { id: 2, name: "Budi", rating: 4, comment: "Fasilitas lengkap, cocok buat keluarga." },
+        { id: 3, name: "Citra", rating: 5, comment: "Pemandangan bagus, spot bersih." }
       ]
     };
   },
-  mounted() {
-    // Inisialisasi Google Maps
-    
+  methods: {
+    getPackageDescription(name) {
+      const pkg = this.spot.packages.find(p => p.name === name);
+      return pkg ? pkg.description : "Pilih paket untuk melihat detail.";
+    }
   }
 };
 </script>
 
 <style scoped>
 .spot-detail-page {
-  background: #f7f9fc;
-  padding-top: 90px; /* beri jarak dari navbar fixed */
+  padding-top: 70px; /* supaya tidak ketiban navbar fixed-top */
 }
-.main-image img {
-  max-height: 400px;
+.review-section {
+  background-color: #e9f7ff;
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid #cce6ff;
+}
+.img-thumbnail {
   object-fit: cover;
+  height: 80px;
 }
 </style>
