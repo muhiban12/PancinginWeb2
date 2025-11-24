@@ -62,7 +62,7 @@
         <p class="mb-2">{{ spot.overview }}</p>
         <p class="text-muted"><strong>📍 Lokasi:</strong> {{ spot.location }}</p>
       </section>
-
+      
       <!-- Fasilitas & Aturan -->
       <section class="container my-3">
         <h5 class="fw-bold">🏕️ Fasilitas & Aturan</h5>
