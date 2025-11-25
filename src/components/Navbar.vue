@@ -9,7 +9,7 @@
         v-model="searchQuery"
         :placeholder="searchPlaceholder"
         @keyup.enter="goSearch"
-        autofocus
+        autofocus 
       />
       <button @click="goSearch">Cari</button>
       <span class="close-btn" @click="showFullSearch = false">✖</span>
@@ -21,7 +21,7 @@
         <router-link to="/store" class="nav-icon"><i class="bi bi-shop"></i></router-link>
         <i class="bi bi-bell nav-icon" @click="showNotif = true"></i>
         <router-link to="/cart" class="nav-icon"><i class="bi bi-cart"></i></router-link>
-        <router-link to="/account" class="profile-wrapper">
+        <router-link :to="profileLink" class="profile-wrapper">
           <img src="https://i.pravatar.cc/100" class="profile-pic" />
         </router-link>
       </template>
@@ -33,7 +33,9 @@
           <router-link to="/store" class="d-block mb-2"><i class="bi bi-shop"></i> Store</router-link>
           <span class="d-block mb-2 nav-icon" @click="showNotif = true"><i class="bi bi-bell"></i> Notifications</span>
           <router-link to="/cart" class="d-block mb-2"><i class="bi bi-cart"></i> Cart</router-link>
-          <router-link to="/account" class="d-block"><i class="bi bi-person-circle"></i> Profile</router-link>
+          <router-link :to="profileLink" class="d-block">
+            <i class="bi bi-person-circle"></i> Profile
+          </router-link>
         </div>
       </template>
     </div>
@@ -70,6 +72,10 @@ export default {
       if (this.$route.path.startsWith('/store')) return 'Cari produk...';
       if (this.$route.path.startsWith('/spots')) return 'Cari pemancingan terdekat...';
       return 'Cari...';
+    },
+    profileLink() {
+      const isLoggedIn = !!localStorage.getItem('token');
+      return isLoggedIn ? '/profile' : '/login';
     }
   },
   mounted() {
