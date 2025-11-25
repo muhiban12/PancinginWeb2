@@ -1,9 +1,9 @@
-// routes/spot.js
 const express = require("express");
 const router = express.Router();
+const spotController = require("../controller/spotcontroller");
 
-router.get("/", (req, res) => {
-  res.json({ message: "Spot route aktif 🚀" });
-});
+router.post("/buka", spotController.buka);
+router.get("/list", spotController.list);
+router.get("/:id", spotController.detail);
 
 module.exports = router;

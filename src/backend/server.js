@@ -4,42 +4,72 @@ const morgan = require("morgan");
 require("dotenv").config();
 
 const db = require("./config/db");
+const verifyToken = require("./middleware/verifytoken"); // JWT middleware
 
-const app = express(); // pindahkan ini ke atas dulu
-app.set("db", db);     // baru set db setelah app dibuat
+const app = express();
+app.set("db", db);
 
 // Middleware dasar
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-// Routes modular
+// ==============================
+// ROUTES IMPORT
+// ==============================
 const authRoutes = require("./routes/auth");
 const produkRoutes = require("./routes/produk");
 const spotRoutes = require("./routes/spot");
-
 const tokoRoutes = require("./routes/toko");
-app.use("/api/toko", tokoRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/produk", produkRoutes);
-app.use("/api/spot", spotRoutes);
+const kursiRoutes = require("./routes/kursi");
+const paketRoutes = require("./routes/paket");
+const bookingRoutes = require("./routes/booking");
+const ulasanRoutes = require("./routes/ulasan");
+const eventRoutes = require("./routes/event");
+const bookingEventRoutes = require("./routes/bookingevent");
 
-// Health check
+// ==============================
+// ROUTES REGISTRATION
+// ==============================
+
+// Public routes (tidak butuh token)
+app.use("/api/auth", authRoutes);
+app.use("/api/produk", produkRoutes);      // GET produk publik
+app.use("/api/spot", spotRoutes);
+app.use("/api/event", eventRoutes);
+
+// Protected routes (khusus user login)
+app.use("/api/toko", verifyToken, tokoRoutes);
+app.use("/api/kursi", verifyToken, kursiRoutes);
+app.use("/api/paket", verifyToken, paketRoutes);
+app.use("/api/booking", verifyToken, bookingRoutes);
+app.use("/api/ulasan", verifyToken, ulasanRoutes);
+app.use("/api/bookingevent", verifyToken, bookingEventRoutes);
+
+// ==============================
+// HEALTH CHECK
+// ==============================
 app.get("/", (req, res) => {
   res.send("🚀 Server berjalan dengan baik");
 });
 
-// Error handler global
+// ==============================
+// ERROR HANDLER GLOBAL
+// ==============================
 app.use((err, req, res, next) => {
   console.error("❌ Error:", err.stack);
   res.status(500).json({ error: "Terjadi kesalahan server" });
 });
 
-// Test koneksi DB
+// ==============================
+// TEST KONEKSI DATABASE
+// ==============================
 db.query("SELECT 1")
   .then(() => console.log("✅ Terhubung ke MySQL"))
   .catch((err) => console.error("❌ Gagal koneksi ke MySQL:", err));
 
-// Jalankan server
+// ==============================
+// RUN SERVER
+// ==============================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
