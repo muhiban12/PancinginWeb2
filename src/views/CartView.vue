@@ -40,7 +40,7 @@
           {
             id: 1,
             name: 'Dazelite Black Keycaps',
-            store: 'Gooddealstock',
+            store: 'Gooddealstock', 
             price: 56000,
             qty: 1,
             image: 'https://via.placeholder.com/80x80?text=Dazelite'

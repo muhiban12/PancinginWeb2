@@ -52,6 +52,8 @@
       decreaseQty() {
         if (this.item.qty > 1) {
           this.$emit('update-qty', this.item.id, this.item.qty - 1);
+        }else {
+          this.$emit('remove-item', this.item.id);
         }
       },
       removeItem() {
