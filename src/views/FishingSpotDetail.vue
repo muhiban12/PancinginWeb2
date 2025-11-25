@@ -20,10 +20,9 @@
         </div>
       </section>
 
-      <!-- Gambar Utama + Paket Booking -->
+      <!-- Gambar + Tombol Booking -->
       <section class="container my-4">
         <div class="row g-4 align-items-start">
-          <!-- Gambar -->
           <div class="col-md-6">
             <img :src="spot.images[0]" class="img-fluid rounded shadow mb-2" />
             <div class="d-flex gap-2 flex-wrap">
@@ -37,21 +36,12 @@
             </div>
           </div>
 
-          <!-- Paket Booking -->
           <div class="col-md-6">
-            <h5 class="fw-bold">🎟️ Pilih Paket Booking</h5>
-            <div class="d-flex flex-wrap gap-2 mb-3">
-              <button
-                v-for="(pkg, i) in spot.packages"
-                :key="i"
-                :class="['btn', selectedPackage === pkg.name ? 'btn-primary' : 'btn-outline-primary']"
-                @click="selectedPackage = pkg.name"
-              >
-                {{ pkg.name }} - Rp {{ pkg.price.toLocaleString() }}
-              </button>
-            </div>
-            <p class="text-muted">{{ getPackageDescription(selectedPackage) }}</p>
-            <button class="btn btn-success mt-2">Booking Langsung</button>
+            <h5 class="fw-bold">🎟️ Booking Tempat</h5>
+            <p class="text-muted">Klik tombol untuk pilih jam & kursi.</p>
+            <button class="btn btn-success mt-2" @click="showModal = true">
+              Booking Langsung
+            </button>
           </div>
         </div>
       </section>
@@ -62,7 +52,7 @@
         <p class="mb-2">{{ spot.overview }}</p>
         <p class="text-muted"><strong>📍 Lokasi:</strong> {{ spot.location }}</p>
       </section>
-      
+
       <!-- Fasilitas & Aturan -->
       <section class="container my-3">
         <h5 class="fw-bold">🏕️ Fasilitas & Aturan</h5>
@@ -85,14 +75,24 @@
         <p>Loading...</p>
       </div>
     </template>
+
+    <!-- Pop-up Booking -->
+    <BookingFlowModal
+      v-if="showModal"
+      @checkout="handleCheckout"
+      @close="showModal = false"
+    />
   </div>
 </template>
 
 <script>
+import BookingFlowModal from "@/components/BookingFlowModal.vue"
+
 export default {
+  components: { BookingFlowModal },
   data() {
     return {
-      selectedPackage: null,
+      showModal: false,
       spot: {
         name: "Pemancingan Cimaung",
         images: [
@@ -102,45 +102,33 @@ export default {
         ],
         overview: "Spot pemancingan alami dengan kolam air tawar dan saung santai.",
         location: "Jl. Raya Cimaung No. 88, Bandung Selatan",
-        packages: [
-          { name: "1 Jam", price: 20000, description: "Paket pemancingan selama 1 jam." },
-          { name: "2 Jam", price: 35000, description: "Paket hemat untuk 2 jam." }
-        ],
         rules: "Dilarang membawa umpan hidup. Anak-anak wajib didampingi. Dilarang merokok di area kolam."
       },
-      weatherNow: {
-        temperature: 25,
-        humidity: 95,
-        condition: "Berawan"
-      },
+      weatherNow: { temperature: 25, humidity: 95, condition: "Berawan" },
       weather7Days: [
         { date: "24 Nov", temperature: 25, humidity: 95, condition: "Berawan" },
         { date: "25 Nov", temperature: 25, humidity: 94, condition: "Berawan" },
-        { date: "26 Nov", temperature: 25, humidity: 93, condition: "Berawan" },
-        { date: "27 Nov", temperature: 24, humidity: 94, condition: "Berawan" },
-        { date: "28 Nov", temperature: 24, humidity: 94, condition: "Berawan" },
-        { date: "29 Nov", temperature: 24, humidity: 94, condition: "Berawan" },
-        { date: "30 Nov", temperature: 24, humidity: 94, condition: "Berawan" }
+        { date: "26 Nov", temperature: 25, humidity: 93, condition: "Berawan" }
       ],
       reviews: [
         { id: 1, name: "Alan", rating: 5, comment: "Tempatnya nyaman, ikannya banyak!" },
         { id: 2, name: "Budi", rating: 4, comment: "Fasilitas lengkap, cocok buat keluarga." },
         { id: 3, name: "Citra", rating: 5, comment: "Pemandangan bagus, spot bersih." }
       ]
-    };
+    }
   },
   methods: {
-    getPackageDescription(name) {
-      const pkg = this.spot.packages.find(p => p.name === name);
-      return pkg ? pkg.description : "Pilih paket untuk melihat detail.";
+    handleCheckout(data) {
+      console.log("Booking data:", data)
+      this.$router.push({ name: "CheckOutPage", query: data })
     }
   }
-};
+}
 </script>
 
 <style scoped>
 .spot-detail-page {
-  padding-top: 70px; /* supaya tidak ketiban navbar fixed-top */
+  padding-top: 70px;
 }
 .review-section {
   background-color: #e9f7ff;

@@ -5,28 +5,17 @@
 
     <div class="order-list">
       <div v-for="order in orders" :key="order.id" class="order-card">
-        <div class="order-info">
+        <div class="order-header">
           <strong>Pesanan #{{ order.id }}</strong>
-          <span>{{ order.product }} ({{ order.qty }} item)</span>
-          <span>Total: Rp{{ order.total }}</span>
-
-          <span v-if="order.status === 'dibayar'" class="status pending">
-            Pembayaran diterima, pesanan sedang diproses
-          </span>
-          <span v-else-if="order.status === 'dikirim'" class="status success">
-            Pesanan sudah dikemas dan sedang dikirim
-          </span>
-          <span v-else-if="order.status === 'selesai'" class="status done">
-            Pesanan selesai
-          </span>
-          <span v-else-if="order.status === 'dibatalkan'" class="status failed">
-            Pesanan dibatalkan
-          </span>
         </div>
-
-        <button class="btn-action">
-          Detail
-        </button>
+        <div class="order-body">
+          <p><strong>Produk:</strong> {{ order.product }} ({{ order.qty }} item)</p>
+          <p><strong>Total:</strong> Rp{{ order.total }}</p>
+          <p>
+            <strong>Status:</strong>
+            <span :class="['status', order.status]">{{ statusText(order.status) }}</span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -42,32 +31,53 @@ export default {
         { id: 202, product: "Buku Catatan", qty: 3, total: "90.000", status: "dikirim" }
       ]
     }
+  },
+  methods: {
+    statusText(status) {
+      return {
+        dibayar: "Pembayaran diterima, pesanan sedang diproses",
+        dikirim: "Pesanan sudah dikemas dan sedang dikirim",
+        selesai: "Pesanan selesai",
+        dibatalkan: "Pesanan dibatalkan"
+      }[status]
+    }
   }
 }
 </script>
 
 <style scoped>
 .status-page {
-  padding: 2rem;
   max-width: 960px;
   margin: 0 auto;
+  padding: 2rem;
+  padding-top: 100px; /* offset navbar */
+  font-family: 'Poppins', sans-serif;
+  color: #003366;
 }
 
+/* ===== Typography ===== */
 h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #003366;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
 }
 
 .subtitle {
   margin-bottom: 2rem;
   color: #555;
+  font-size: 0.95rem;
 }
 
+.order-body p {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  color: #003366;
+}
+
+/* ===== Order List Layout ===== */
 .order-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 @media (min-width: 768px) {
@@ -78,56 +88,62 @@ h1 {
   }
 }
 
+/* ===== Order Card ===== */
 .order-card {
-  background: #f8f9fa;
+  background: #e6f0ff;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
 
-.order-info {
+.order-header {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
-  color: #003366;
-}
-
-.status.pending {
-  color: #f57c00;
+  justify-content: space-between;
+  align-items: center;
   font-weight: 600;
+  font-size: 1rem;
 }
 
-.status.success {
-  color: #2e7d32;
+.location {
+  background: #1565c0;
+  color: #fff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+/* ===== Status Badge ===== */
+.status {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
   font-weight: 600;
+  color: #fff;
 }
 
-.status.done {
-  color: #1565c0;
-  font-weight: 600;
+.status.dibayar {
+  background: #f57c00; /* orange */
 }
 
-.status.failed {
-  color: #c62828;
-  font-weight: 600;
+.status.dikirim {
+  background: #2e7d32; /* green */
 }
 
-.btn-action {
-  align-self: flex-start;
-  background: #003366;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s ease;
+.status.selesai {
+  background: #1565c0; /* blue */
 }
 
-.btn-action:hover {
-  background: #0055aa;
+.status.dibatalkan {
+  background: #c62828; /* red */
+}
+
+/* ===== Divider (optional) ===== */
+.divider {
+  margin: 0 0.5rem;
+  color: #999;
 }
 </style>
