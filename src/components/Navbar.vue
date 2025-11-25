@@ -1,91 +1,76 @@
 <template>
   <nav :class="['main-nav', { scrolled: isScrolled || !isHomepage }]">
+    <div v-if="!showFullSearch" class="nav-left">
+      <router-link to="/" class="logo">🎣 Pancingin</router-link>
+    </div>
 
-<!-- Logo -->
-<div v-if="!showFullSearch" class="nav-left">
-  <router-link to="/" class="logo">🎣 Pancingin</router-link>
-</div>
+    <div v-if="showFullSearch" class="full-search">
+      <input
+        v-model="searchQuery"
+        :placeholder="searchPlaceholder"
+        @keyup.enter="goSearch"
+        autofocus
+      />
+      <button @click="goSearch">Cari</button>
+      <span class="close-btn" @click="showFullSearch = false">✖</span>
+    </div>
 
-<!-- FULL SCREEN SEARCH MODE -->
-<div v-if="showFullSearch" class="full-search">
-  <input
-    v-model="searchQuery"
-    :placeholder="searchPlaceholder"
-    @keyup.enter="goSearch"
-    autofocus
-  />
-  <button @click="goSearch">Cari</button>
-  <span class="close-btn" @click="showFullSearch = false">✖</span>
-</div>
+    <div v-if="!showFullSearch" class="nav-right">
+      <template v-if="!isMobileLike">
+        <i v-if="showSearchIcon" class="bi bi-search nav-icon" @click="showFullSearch = true"></i>
+        <router-link to="/store" class="nav-icon"><i class="bi bi-shop"></i></router-link>
+        <i class="bi bi-bell nav-icon" @click="showNotif = true"></i>
+        <router-link to="/cart" class="nav-icon"><i class="bi bi-cart"></i></router-link>
+        <router-link to="/account" class="profile-wrapper">
+          <img src="https://i.pravatar.cc/100" class="profile-pic" />
+        </router-link>
+      </template>
 
-<!-- Icons kanan -->
-<div v-if="!showFullSearch" class="nav-right">
+      <template v-if="isMobileLike">
+        <i v-if="isScrolled" class="bi bi-search nav-icon" @click="showFullSearch = true"></i>
+        <i class="bi bi-list nav-icon" @click="showMobileMenu = !showMobileMenu"></i>
+        <div v-if="showMobileMenu" class="mobile-menu position-absolute bg-white p-2 shadow rounded">
+          <router-link to="/store" class="d-block mb-2"><i class="bi bi-shop"></i> Store</router-link>
+          <span class="d-block mb-2 nav-icon" @click="showNotif = true"><i class="bi bi-bell"></i> Notifications</span>
+          <router-link to="/cart" class="d-block mb-2"><i class="bi bi-cart"></i> Cart</router-link>
+          <router-link to="/account" class="d-block"><i class="bi bi-person-circle"></i> Profile</router-link>
+        </div>
+      </template>
+    </div>
 
-<!-- Desktop -->
-<template v-if="!isMobileLike">
-  <i v-if="showSearchIcon" class="bi bi-search nav-icon" @click="showFullSearch = true"></i>
-  <router-link to="/store" class="nav-icon"><i class="bi bi-shop"></i></router-link>
-  <router-link to="/notifications" class="nav-icon"><i class="bi bi-bell"></i></router-link>
-  <router-link to="/cart" class="nav-icon"><i class="bi bi-cart"></i></router-link>
-  <router-link to="/account" class="profile-wrapper">
-    <img src="https://i.pravatar.cc/100" class="profile-pic" />
-  </router-link>
-</template>
-
-<!-- Mobile -->
-<template v-if="isMobileLike">
-  <!-- Search icon hanya muncul jika sudah scroll -->
-  <i v-if="isScrolled" class="bi bi-search nav-icon" @click="showFullSearch = true"></i>
-
-  <!-- Hamburger icon selalu muncul -->
-  <i class="bi bi-list nav-icon" @click="showMobileMenu = !showMobileMenu"></i>
-
-  <!-- Mobile menu -->
-  <div v-if="showMobileMenu" class="mobile-menu position-absolute bg-white p-2 shadow rounded">
-    <router-link to="/store" class="d-block mb-2"><i class="bi bi-shop"></i> Store</router-link>
-    <router-link to="/notifications" class="d-block mb-2"><i class="bi bi-bell"></i> Notifications</router-link>
-    <router-link to="/cart" class="d-block mb-2"><i class="bi bi-cart"></i> Cart</router-link>
-    <router-link to="/account" class="d-block"><i class="bi bi-person-circle"></i> Profile</router-link>
-  </div>
-</template>
-
-</div>
-
-
-</nav>
-
+    <NotificationModal :visible="showNotif" @close="showNotif = false" />
+  </nav>
 </template>
 
 <script>
+import NotificationModal from './NotificationModal.vue'
+
 export default {
+  components: { NotificationModal },
   data() {
-  return {
-    isScrolled: false,
-    searchQuery: "",
-    showFullSearch: false,
-    showMobileMenu: false,
+    return {
+      isScrolled: false,
+      searchQuery: "",
+      showFullSearch: false,
+      showMobileMenu: false,
+      showNotif: false
     };
   },
   computed: {
     isMobileLike() {
-      return window.innerWidth < 768; // kamu bisa adjust breakpoint
+      return window.innerWidth < 768;
     },
-    isHomepage(){
+    isHomepage() {
       return this.$route.path === '/';
     },
     showSearchIcon() {
       return !this.isHomepage || this.isScrolled;
     },
     searchPlaceholder() {
-    if (this.$route.path.startsWith('/store')) {
-      return 'Cari produk...';
-    } 
-    else if (this.$route.path.startsWith('/spots')) {
-      return 'Cari pemancingan terdekat...';
+      if (this.$route.path.startsWith('/store')) return 'Cari produk...';
+      if (this.$route.path.startsWith('/spots')) return 'Cari pemancingan terdekat...';
+      return 'Cari...';
     }
-    return 'Cari...';
-  }
-
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -100,11 +85,10 @@ export default {
     },
     goSearch() {
       if (!this.searchQuery.trim()) return;
-      this.$router.push({ path: "/spots", query: { q: this.searchQuery }});
+      this.$router.push({ path: "/spots", query: { q: this.searchQuery } });
       this.showFullSearch = false;
     }
   }
-  
 };
 </script>
 
