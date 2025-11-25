@@ -12,6 +12,9 @@ exports.verifyToken = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return res.status(401).json({ error: "Token sudah expired" });
+    }
     res.status(403).json({ error: "Token tidak valid" });
   }
 };

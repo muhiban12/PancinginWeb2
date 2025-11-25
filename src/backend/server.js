@@ -1,31 +1,45 @@
 const express = require("express");
 const cors = require("cors");
-const mysql = require("mysql2/promise");
+const morgan = require("morgan");
 require("dotenv").config();
 
-const app = express();
+const db = require("./config/db");
+
+const app = express(); // pindahkan ini ke atas dulu
+app.set("db", db);     // baru set db setelah app dibuat
+
+// Middleware dasar
 app.use(cors());
 app.use(express.json());
+app.use(morgan("dev"));
 
-const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3307
-});
-app.set("db", db);
-
+// Routes modular
 const authRoutes = require("./routes/auth");
-app.use("/api/auth", authRoutes);
+const produkRoutes = require("./routes/produk");
+const spotRoutes = require("./routes/spot");
 
+const tokoRoutes = require("./routes/toko");
+app.use("/api/toko", tokoRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/produk", produkRoutes);
+app.use("/api/spot", spotRoutes);
+
+// Health check
+app.get("/", (req, res) => {
+  res.send("🚀 Server berjalan dengan baik");
+});
+
+// Error handler global
+app.use((err, req, res, next) => {
+  console.error("❌ Error:", err.stack);
+  res.status(500).json({ error: "Terjadi kesalahan server" });
+});
+
+// Test koneksi DB
 db.query("SELECT 1")
   .then(() => console.log("✅ Terhubung ke MySQL"))
   .catch((err) => console.error("❌ Gagal koneksi ke MySQL:", err));
 
-app.get("/", (req, res) => {
-  res.send("Server berjalan 🚀");
-});
-
+// Jalankan server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
