@@ -68,7 +68,15 @@
         <p class="mb-1"><strong>Kursi:</strong> {{ selectedSpot }}</p>
         <p class="mb-1"><strong>Durasi:</strong> {{ selectedSlots.length }} jam</p>
         <p class="mb-2"><strong>Total:</strong> Rp{{ hitungHarga(selectedSlots.length).toLocaleString() }}</p>
-        <button class="btn btn-success w-100 mt-3" @click="checkout">Bayar Sekarang</button>
+        <!-- <router-link <button class="btn btn-success w-100" @click="goToCheckout">
+          <iconify-icon icon="mdi:fishing" class="me-2" />
+          Beli Langsung
+        </button> -->
+
+        <router-link to="/checkout">
+  <button class="btn-pay">Bayar Sekarang</button>
+</router-link>
+
       </div>
     </div>
   </div>
@@ -76,6 +84,8 @@
 
 <script>
 import seatMapImg from "@/assets/seatMap.png"
+import { createRouter, createWebHistory } from 'vue-router'
+import CheckoutPage from '@/views/CheckoutPage.vue'
 
 export default {
   name: "BookingFlowModal",
@@ -129,40 +139,21 @@ export default {
       harga += sisaJam * 20000
       return harga
     },
-    checkout() {
+    goToCheckout() {
+      // Emit data booking ke parent
       this.$emit("checkout", {
         slots: this.selectedSlots,
         spot: this.selectedSpot,
+        duration: this.selectedSlots.length,
         total: this.hitungHarga(this.selectedSlots.length)
       })
+      
+      // Redirect ke halaman checkout
+      this.$router.push({ name: 'checkout' })
     }
   }
 }
 </script>
-
-<style scoped>
-.seat-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 kursi per baris */
-  gap: 0.6rem;
-}
-.seat {
-  padding: 0.8rem;
-  border-radius: 8px;
-  border: 1px solid #003366;
-  background: #f0f0f0;
-  text-align: center;
-  font-weight: 500;
-}
-.seat.selected {
-  background: #1565c0;
-  color: #fff;
-}
-.seat.booked {
-  background: #ccc;
-  cursor: not-allowed;
-}
-</style>
 
 <style scoped>
 .booking-overlay {
@@ -175,16 +166,18 @@ export default {
   justify-content: center;
   z-index: 9999;
 }
+
 .booking-card {
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  width: 550px;           /* ← dari 380px → 520px */
+  width: 550px;
   max-width: 100%;
-  padding: 1.5rem 1.2rem; /* ← tambahin padding horizontal */
+  padding: 1.5rem 1.2rem;
   position: relative;
 }
+
 .close-btn {
   background: transparent;
   border: none;
@@ -192,6 +185,7 @@ export default {
   cursor: pointer;
   line-height: 1;
 }
+
 .price-info {
   background: #f8f9fa;
   border: 1px solid #eee;
@@ -199,11 +193,13 @@ export default {
   padding: 0.5rem;
   text-align: center;
 }
+
 .slot-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.6rem;
 }
+
 .slot-item {
   padding: 0.6rem 0.8rem;
   border: 1px solid #ccc;
@@ -212,24 +208,30 @@ export default {
   cursor: pointer;
   transition: 0.2s;
 }
+
 .slot-item:hover {
   background: #e0f0ff;
 }
+
 .slot-item input {
   margin-right: 0.6rem;
 }
+
 .seat-image img {
   max-width: 100%;
   height: auto;
 }
+
 .seat-image p {
   font-size: 0.9rem;
 }
+
 .seat-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* 7 kursi per baris */
+  grid-template-columns: repeat(5, 1fr);
   gap: 0.6rem;
 }
+
 .seat {
   padding: 0.8rem;
   border-radius: 8px;
@@ -237,13 +239,18 @@ export default {
   background: #f0f0f0;
   text-align: center;
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
 }
+
 .seat.selected {
   background: #1565c0;
   color: #fff;
 }
+
 .seat.booked {
   background: #ccc;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 </style>
