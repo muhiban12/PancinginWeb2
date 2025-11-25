@@ -25,8 +25,11 @@ const routes = [
   { path: '/spot/:id', name: 'spot-detail', component : FishingSpotDetail},
   { path: '/notifications', component: () => import('@/views/NotificationsView.vue') },
   { path: '/cart', name: 'cart', component: () => import('@/views/CartView.vue') },
-  { path: '/account', component: () => import('@/views/AccountView.vue') },
+  { path: '/account', component: () => import('@/views/ProfileView.vue') },
   { path: '/checkout', name: 'checkout', component: () => import('@/views/CheckOutPage.vue') },
+  { path: '/profile', name: 'profile', component: () => import('@/views/ProfileView.vue'), meta: { requiresAuth: true } },
+  { path: '/login', name: 'login', component: () => import('@/views/LoginView.vue') },
+  { path: '/register', name: 'register', component: () => import('@/views/RegisterView.vue') },
 
   // Tambahan untuk transaksi
   { path: '/bayar', name: 'bayar', component: BayarView },
@@ -41,6 +44,16 @@ const router = createRouter({
   routes,
   scrollBehavior() {
     return { top: 0 }
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = !!localStorage.getItem('token'); // atau cek Vuex/Pinia
+
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    next('/login');
+  } else {
+    next();
   }
 });
 
