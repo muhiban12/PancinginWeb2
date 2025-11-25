@@ -20,7 +20,7 @@ export default {
 
 <style>
 body {
-  margin: 0;
+  padding-top: 50px;
   font-family: Arial, sans-serif;
   background: #f5f5f5;
 }
@@ -37,4 +37,5 @@ body {
   width: 100%;
   max-width: none;
 }
+
 </style>

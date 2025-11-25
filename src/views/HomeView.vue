@@ -46,6 +46,7 @@ export default {
 
 <style scoped>
 .home-page {
+  padding-top: 0 !important;
   width: 100%;
   max-width: none;
   padding: 0;
@@ -54,14 +55,16 @@ export default {
 
 /* Hero Section */
 .hero {
-  min-height: 100vh;
+  padding-top: -70px;
+  margin-top: -70px;
+  min-height: 120vh;
   background: url('@/assets/marlin.jpg') center/cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   position: relative;
-  padding: 120px 20px 80px;
+  padding: 5px 20px 80px;
 }
 
 .hero::after {
@@ -95,7 +98,7 @@ export default {
   backdrop-filter: blur(5px);
   border-radius: 50px;
   overflow: hidden;
-  margin-top: 20px;
+  margin-top: 20px; 
 }
 
 .search-box input {
