@@ -12,7 +12,7 @@ import BayarView from '@/views/BayarView.vue'
 import DiprosesView from '@/views/DiprosesView.vue'
 import DikirimView from '@/views/DikirimView.vue'
 import TibaView from '@/views/TibaView.vue'
-import UlasanView from '@/views/UlasanView.vue'
+import UlasanView from '@/views/UlasanView.vue' 
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
@@ -24,7 +24,7 @@ const routes = [
   { path: '/product/:id', name: 'ProductDetail', component: ProductDetail},
   { path: '/spot/:id', name: 'spot-detail', component : FishingSpotDetail},
   { path: '/notifications', component: () => import('@/views/NotificationsView.vue') },
-  { path: '/cart', component: () => import('@/views/CartView.vue') },
+  { path: '/cart', name: 'cart', component: () => import('@/views/CartView.vue') },
   { path: '/account', component: () => import('@/views/AccountView.vue') },
   { path: '/checkout', name: 'checkout', component: () => import('@/views/CheckOutPage.vue') },
 
