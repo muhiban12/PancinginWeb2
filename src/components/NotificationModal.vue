@@ -10,11 +10,21 @@
         <section class="transaksi">
           <h3>Transaksi</h3>
           <div class="grid">
-            <NotifItem :icon="bayarIcon" label="Bayar" />
-            <NotifItem :icon="diprosesIcon" label="Diproses" />
-            <NotifItem :icon="dikirimIcon" label="Dikirim" />
-            <NotifItem :icon="tibaIcon" label="Sudah tiba" />
-            <NotifItem :icon="ulasanIcon" label="Ulasan" />
+            <router-link to="/bayar" class="notif-link" @click.native="close">
+              <NotifItem :icon="bayarIcon" label="Status Bayar" />
+            </router-link>
+            <router-link to="/diproses" class="notif-link" @click.native="close">
+              <NotifItem :icon="diprosesIcon" label="Diproses" />
+            </router-link>
+            <router-link to="/dikirim" class="notif-link" @click.native="close">
+              <NotifItem :icon="dikirimIcon" label="Dikirim" />
+            </router-link>
+            <router-link to="/tiba" class="notif-link" @click.native="close">
+              <NotifItem :icon="tibaIcon" label="Sudah tiba" />
+            </router-link>
+            <router-link to="/ulasan" class="notif-link" @click.native="close">
+              <NotifItem :icon="ulasanIcon" label="Ulasan" />
+            </router-link>
           </div>
         </section>
 
@@ -53,8 +63,8 @@ export default {
       ulasanIcon,
       messages: [
         "Produk baru tersedia 🧴",
-        "Pesanan #123 sedang diproses",
-        "Event memancing minggu depan, jangan lupa daftar!"
+        "Pesanan #983 sedang diproses",
+        "Event menarik minggu depan, jangan lupa daftar!"
       ]
     }
   },
@@ -78,57 +88,61 @@ export default {
   z-index: 999;
 }
 .modal-content {
-  background: #ffffff;
-  padding: 2rem;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
   color: #222;
   display: flex;
   flex-direction: column;
-  gap: 2rem; /* jarak antar section */
+  gap: 1.5rem;
+  animation: slideUp 0.3s ease-out;
 }
-
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
 }
-
-.transaksi {
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #ccc;
+header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
 }
-
-.transaksi h3 {
-  margin-bottom: 0.75rem;
+header button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.transaksi h3,
+.pesan h3 {
   font-size: 1.1rem;
   color: #003366;
+  margin-bottom: 0.75rem;
 }
-
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 1rem;
 }
-
-.pesan {
-  margin-top: 1rem;
+.notif-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
 }
-
-.pesan h3 {
-  margin-bottom: 0.75rem;
-  font-size: 1.1rem;
-  color: #003366;
+.notif-link:hover {
+  transform: scale(1.05);
 }
-
 .pesan-list {
-  padding-left: 0;
   list-style: none;
+  padding: 0;
 }
-
 .pesan-list li {
   margin-bottom: 0.75rem;
   background: #f0f8ff;
@@ -138,4 +152,3 @@ header {
   font-weight: 500;
 }
 </style>
-

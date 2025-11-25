@@ -8,6 +8,11 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import ProductDetail from '../views/ProductDetail.vue' 
 import FishingSpotDetail from '@/views/FishingSpotDetail.vue'
+import BayarView from '@/views/BayarView.vue'
+import DiprosesView from '@/views/DiprosesView.vue'
+import DikirimView from '@/views/DikirimView.vue'
+import TibaView from '@/views/TibaView.vue'
+import UlasanView from '@/views/UlasanView.vue'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
@@ -22,6 +27,13 @@ const routes = [
   { path: '/cart', component: () => import('@/views/CartView.vue') },
   { path: '/account', component: () => import('@/views/AccountView.vue') },
   { path: '/checkout', name: 'checkout', component: () => import('@/views/CheckOutPage.vue') },
+
+  // Tambahan untuk transaksi
+  { path: '/bayar', name: 'bayar', component: BayarView },
+  { path: '/diproses', name: 'diproses', component: DiprosesView },
+  { path: '/dikirim', name: 'dikirim', component: DikirimView },
+  { path: '/tiba', name: 'tiba', component: TibaView },
+  { path: '/ulasan', name: 'ulasan', component: UlasanView },
 ];
 
 const router = createRouter({
